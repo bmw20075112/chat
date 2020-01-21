@@ -25,7 +25,7 @@ export default {
 			},
 
 			set(payload){
-				this.$store.commit('userIDChange',payload);
+				this.$store.dispatch('userIDChangeAction',payload);
 			}
 		}
 	},
