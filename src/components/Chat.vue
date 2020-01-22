@@ -1,31 +1,60 @@
 <template>
-    <div>
-		<div class="header text-center vw-100">
-			<router-link to="/" tag="button" class="btn btn-primary">登出</router-link>
-			<h2>Chat Room</h2>
+    <div class="all">
+		<div class="header vw-100">
+			<router-link to="/" tag="button" class="btn btn-secondary mb-0">登出</router-link>
+			<h1 class="text-center mt-0 d-inline-block">聊天室</h1>
 		</div>
-		<template>
-			<div class="d-flex justify-content-end">
-				<div class="align-self-end time">
-					<small class="mb-0 text-muted">time</small>
-				</div>
 
-				<div class="message-box">
-					<p class="message-name mr-1">{{userID}}</p>
-					<p class="message-content bg-primary text-white">片行自我！我靜陸當票電加皮八員年大切足論候書家力山眼們速的山視，都的興我作的由，青此候為你大對雖圖內童快使童動告，動己是，同研去始紀不南城中指這個情大前，優自極明文，形神院作相年完青口；原這次起法才說天很以理點過了見一原的來傳動住越。</p>
-				</div>
+		<div class="body">
+			<div class="wrapper" v-for="message in messages">
+				<div class="container-margin" v-if="message.name==userID">
+					<div class="d-flex justify-content-end">
+						<div class="align-self-end mr-1">
+							<small class="mb-0 text-muted">{{message.timestamp}}</small>
+						</div>
 
-				<div class="head-image">
-					<img src="https://www.teepr.com/wp-content/uploads/2019/08/%E7%A6%AE%E8%B2%8C%E5%81%87%E7%AC%91%E8%B2%931.jpg" alt="">
+						<div class="message-box">
+							<p class="message-name-self mr-1">{{message.name}}</p>
+							<p class="message-content bg-primary text-white">{{message.content}}</p>
+						</div>
+
+						<div class="head-image mt-2 mr-1">
+							<img src="https://www.teepr.com/wp-content/uploads/2019/08/%E7%A6%AE%E8%B2%8C%E5%81%87%E7%AC%91%E8%B2%931.jpg" alt="">
+						</div>
+					</div>
+				</div>
+			
+			
+			
+				<div v-if="message.name != userID" class="container-margin">
+					<div class="d-flex justify-content-start">
+						<div class="head-image mt-2 mr-2">
+							<img src="https://www.teepr.com/wp-content/uploads/2019/08/%E7%A6%AE%E8%B2%8C%E5%81%87%E7%AC%91%E8%B2%931.jpg" alt="">
+						</div>
+
+						<div class="message-box">
+							<p class="message-name-others ml-1">{{message.name}}</p>
+							<p class="message-content-others text-dark">{{message.content}}</p>
+						</div>
+
+						<div class="align-self-end">
+							<small class="mb-0 text-muted">{{message.timestamp}}</small>
+						</div>
+					</div>
 				</div>
 			</div>
-		</template>	
-
-		<app-input class="fixed-bottom"></app-input>
+		</div>
+		
+		<div class="footer">
+			<app-input></app-input>
+		</div>
+		
     </div>
 </template>
 
 <script scoped>
+import db from '../firebase';
+import moment from 'moment';
 import Input from '../components/Input.vue';
 export default {
 	components:{
@@ -34,19 +63,54 @@ export default {
 
 	data() {
 		return {
-			userID: this.$store.state.userID
+			userID: this.$store.state.userID,
+			messages:[]
 		}
 	},
+
+	methods: {
+		scrollDown(){
+			let wrapper=this.$el.querySelector('.wrapper');
+			wrapper.scrollTop=wrapper.scrollHeight;
+		}
+	},
+
+	created(){
+		let ref=db.collection('messages').orderBy('timestamp');
+		ref.onSnapshot(snapshot=>{
+			snapshot.docChanges().forEach(change=>{
+				if(change.type=='added'){
+					let doc=change.doc;
+					this.messages.push({
+						id : doc.id,
+						name: doc.data().id,
+						content:doc.data().content,
+						timestamp:moment(doc.data().timestamp).format('H:mm')
+					})
+				}
+			})
+		});
+	},
+
+	updated(){
+		const wrapper=document.querySelector('.wrapper');
+		wrapper.scrollTop=wrapper.scrollHeight;
+	}
 }
 </script>
 
 <style>
+.container-margin{
+	margin-bottom:20px;
+}
+
 .header{
-	background: violet;
+	background: coral;
+	height: 50px;
 }
 
 .head-image{
-	max-width: 3rem;
+	max-width: 3.5rem;
 }
 
 .head-image img{
@@ -54,7 +118,11 @@ export default {
 	border-radius: 100%;
 }
 
-.message-name{
+.message-name-others{
+	text-align:left;
+}
+
+.message-name-self{
 	text-align:right;
 }
 
@@ -67,10 +135,34 @@ export default {
 .message-content{
 	margin: -15px 0;
 	padding: 10px;
-	border-radius: 25px;
+	border-radius: 15px;
 }
 
-.time{
+.message-content-others{
 	margin: -15px 0;
+	padding: 10px;
+	border-radius: 15px;
+	background-color: #ccc;
+}
+
+.wrapper{
+	overflow: auto;
+}
+
+.body{
+	flex-grow: 1;
+	background-color: cornsilk;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+.footer{
+	height: 6.7rem;
+}
+
+.all{
+	display: flex;
+	flex-direction: column;
+	 height: 100vh;
 }
 </style>

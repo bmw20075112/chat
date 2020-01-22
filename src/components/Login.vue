@@ -3,7 +3,7 @@
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-body">
-					<form>
+					<form @submit.prevent="login">
 						<div class="form-group">
 							<label for="message-text" class="col-form-label">你的ID:</label>
 							<input class="form-control" id="message-text" v-model="userID">
