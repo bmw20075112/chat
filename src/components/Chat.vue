@@ -1,48 +1,44 @@
 <template>
     <div class="all">
-		<div class="header vw-100">
-			<router-link to="/" tag="button" class="btn btn-secondary mb-0">登出</router-link>
-			<h1 class="text-center mt-0 d-inline-block">聊天室</h1>
-		</div>
+		<app-header></app-header>
 
 		<div class="body">
-			<div class="wrapper" v-for="message in messages">
-				<div class="container-margin" v-if="message.name==userID">
-					<div class="d-flex justify-content-end">
-						<div class="align-self-end mr-1">
-							<small class="mb-0 text-muted">{{message.timestamp}}</small>
-						</div>
+			<transition-group name="fade" mode="out-in">
+				<div class="wrapper" v-for="message in messages" :key="message.id">
+					<div class="container-margin" v-if="message.name==userID">
+						<div class="d-flex justify-content-end">
+							<div class="timeAlign">
+								<div class="align-self-end mr-1 time-self">
+									<small class="text-muted">{{message.timestamp}}</small>
+								</div>
 
-						<div class="message-box">
-							<p class="message-name-self mr-1">{{message.name}}</p>
-							<p class="message-content bg-primary text-white">{{message.content}}</p>
+								<div class="message-box">
+									<p class="message-content bg-primary text-white">{{message.content}}</p>
+								</div>
+							</div>
 						</div>
+					</div>
+			
+					<div v-if="message.name != userID" class="container-margin">
+						<div class="d-flex justify-content-start">
+							<div class="head-image mr-2 mt-1">
+								<img src="https://www.teepr.com/wp-content/uploads/2019/08/%E7%A6%AE%E8%B2%8C%E5%81%87%E7%AC%91%E8%B2%931.jpg" alt="">
+							</div>
 
-						<div class="head-image mt-2 mr-1">
-							<img src="https://www.teepr.com/wp-content/uploads/2019/08/%E7%A6%AE%E8%B2%8C%E5%81%87%E7%AC%91%E8%B2%931.jpg" alt="">
+							<div class="timeAlign">
+								<div class="message-box">
+									<p class="message-name-others ml-1">{{message.name}}</p>
+									<p class="message-content-others text-dark">{{message.content}}</p>
+								</div>
+
+								<div class="align-self-end time-others">
+									<small class="mb-0 text-muted">{{message.timestamp}}</small>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
-			
-			
-			
-				<div v-if="message.name != userID" class="container-margin">
-					<div class="d-flex justify-content-start">
-						<div class="head-image mt-2 mr-2">
-							<img src="https://www.teepr.com/wp-content/uploads/2019/08/%E7%A6%AE%E8%B2%8C%E5%81%87%E7%AC%91%E8%B2%931.jpg" alt="">
-						</div>
-
-						<div class="message-box">
-							<p class="message-name-others ml-1">{{message.name}}</p>
-							<p class="message-content-others text-dark">{{message.content}}</p>
-						</div>
-
-						<div class="align-self-end">
-							<small class="mb-0 text-muted">{{message.timestamp}}</small>
-						</div>
-					</div>
-				</div>
-			</div>
+			</transition-group>
 		</div>
 		
 		<div class="footer">
@@ -56,9 +52,11 @@
 import db from '../firebase';
 import moment from 'moment';
 import Input from '../components/Input.vue';
+import Header from '../components/Header';
 export default {
 	components:{
-		'app-input':Input
+		'app-input':Input,
+		'app-header':Header
 	},
 
 	data() {
@@ -69,10 +67,7 @@ export default {
 	},
 
 	methods: {
-		scrollDown(){
-			let wrapper=this.$el.querySelector('.wrapper');
-			wrapper.scrollTop=wrapper.scrollHeight;
-		}
+		
 	},
 
 	created(){
@@ -85,7 +80,7 @@ export default {
 						id : doc.id,
 						name: doc.data().id,
 						content:doc.data().content,
-						timestamp:moment(doc.data().timestamp).format('H:mm')
+						timestamp:moment(doc.data().timestamp).format('HH:mm')
 					})
 				}
 			})
@@ -93,8 +88,8 @@ export default {
 	},
 
 	updated(){
-		const wrapper=document.querySelector('.wrapper');
-		wrapper.scrollTop=wrapper.scrollHeight;
+		const toBottom=document.querySelector('.body');
+		toBottom.scrollTop=toBottom.scrollHeight;
 	}
 }
 </script>
@@ -102,11 +97,6 @@ export default {
 <style>
 .container-margin{
 	margin-bottom:20px;
-}
-
-.header{
-	background: coral;
-	height: 50px;
 }
 
 .head-image{
@@ -122,27 +112,37 @@ export default {
 	text-align:left;
 }
 
-.message-name-self{
-	text-align:right;
-}
-
 .message-box{
-	padding: 0 0.5rem 0 0;
+	padding: 0 0.8rem 0 0;
 	max-width: 15rem;
 	word-wrap: break-word;
 }
 
-.message-content{
-	margin: -15px 0;
+.message-content, .message-content-others{
 	padding: 10px;
+	margin: -15px 0 0 0;
 	border-radius: 15px;
 }
 
+.message-content{
+	margin: 0;
+}
+
 .message-content-others{
-	margin: -15px 0;
-	padding: 10px;
-	border-radius: 15px;
 	background-color: #ccc;
+}
+
+.timeAlign{
+	display: flex;
+	align-items: flex-end;
+}
+
+.time-others{
+	padding: 0 10px 0 0;
+}
+
+.time-self{
+	padding: 0 0 0 10px;
 }
 
 .wrapper{
@@ -163,6 +163,19 @@ export default {
 .all{
 	display: flex;
 	flex-direction: column;
-	 height: 100vh;
+	height: 100vh;
+}
+
+/* animation */
+.fade-enter{
+	opacity: 0;
+}
+
+.fade-leave{
+	opacity: 100;
+}
+
+.fade-enter-active, .fade-leave-active{
+	transition: opacity 0.8s;
 }
 </style>
