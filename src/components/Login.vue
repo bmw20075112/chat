@@ -1,6 +1,6 @@
 <template>
-	<div>
-		<div class="modal-dialog" role="document">
+	<div class="bg">
+		<div class="modal-dialog content" role="document">
 			<div class="modal-content">
 				<div class="modal-body">
 					<form @submit.prevent="login">
@@ -43,4 +43,19 @@ export default {
 </script>
 
 <style>
+.bg {
+	display: flex;
+  	z-index: 0; /* Sit on top */
+	left: 0;
+	top: 0;
+	width: 100vw; /* Full width */
+	height: 100vh; /* Full height */
+	background-color: rgb(0,0,0); /* Fallback color */
+	background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
+	justify-content: center;
+}
+
+.content{
+	align-self: center;
+}
 </style>

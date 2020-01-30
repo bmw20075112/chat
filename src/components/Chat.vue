@@ -22,7 +22,7 @@
 					<div v-if="message.name != userID" class="container-margin">
 						<div class="d-flex justify-content-start">
 							<div class="head-image mr-2 mt-1">
-								<img src="https://www.teepr.com/wp-content/uploads/2019/08/%E7%A6%AE%E8%B2%8C%E5%81%87%E7%AC%91%E8%B2%931.jpg" alt="">
+								<img src="https://cdn2.ettoday.net/images/3454/3454344.jpg" alt="?">
 							</div>
 
 							<div class="timeAlign">
@@ -96,7 +96,7 @@ export default {
 
 <style>
 .container-margin{
-	margin-bottom:20px;
+	margin:5px 0;
 }
 
 .head-image{

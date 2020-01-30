@@ -1,9 +1,9 @@
 <template>
 	<div>
-		<form @submit.prevent="sendMessage">
+		<form @submit.prevent="sendMessage" @keyup.enter.exact="sendMessage">
 			<div class="form-group mb-0 text-input">
-				<input type="text" class="form-control" 
-				v-model="message">
+				<textarea type="text" class="form-control" 
+				v-model="message"></textarea>
 				<i class="far fa-paper-plane bg-white" @click.prevent="sendMessage"></i>
 			</div>
 		</form>
@@ -63,7 +63,7 @@ export default {
 }
 
 .far{
-	font-size: 2em;
+	font-size: 2.5rem;
 	padding: 10px;
 	color: #007bff;
 	border: 1px solid #ddd;

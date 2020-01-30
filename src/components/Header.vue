@@ -1,14 +1,25 @@
 <template>
 	<div>
 		<div class="header">
-            <h3 class='title'>聊天室</h3>
+            <button class="logout btn btn-secondary" @click="logout">登出</button>
+            <p class='title'>「{{this.$store.state.userID}}」的聊天室</p>
         </div>
 	</div>
 </template>
 
 <script>
 export default {
-    
+    data() {
+        return {
+            
+        }
+    },
+
+    methods:{
+        logout(){
+            this.$router.push('/');
+        }
+    }
 }
 </script>
 
@@ -27,7 +38,9 @@ export default {
 	width: 100vw;
 }
 
-.btnctrl{
-    display: inline-block;
+.logout{
+    height: 50px;
+    width: 4rem;
+    position: absolute;
 }
 </style>
