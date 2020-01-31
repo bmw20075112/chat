@@ -42,20 +42,24 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .bg {
 	display: flex;
-  	z-index: 0; /* Sit on top */
+  	z-index: 0;
 	left: 0;
 	top: 0;
-	width: 100vw; /* Full width */
-	height: 100vh; /* Full height */
-	background-color: rgb(0,0,0); /* Fallback color */
-	background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
+	width: 100vw;
+	height: 100vh;
+	background-color: rgb(255,248,220);
 	justify-content: center;
 }
 
 .content{
 	align-self: center;
+}
+
+.btn-primary{
+	background-color:coral; 
+	border: rgb(172, 82, 49);
 }
 </style>

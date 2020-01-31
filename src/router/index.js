@@ -1,8 +1,8 @@
-import Vue from 'vue'
+import Vue from 'vue';
 import VueRouter from 'vue-router'
-import Login from '../components/Login'
-import Chat from '../components/Chat'
 import store from '../store/index'
+const Login=()=>import('../components/Login');
+const Chat=()=>import('../components/Chat');
 
 Vue.use(VueRouter)
 

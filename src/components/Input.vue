@@ -65,7 +65,7 @@ export default {
 .far{
 	font-size: 2.5rem;
 	padding: 10px;
-	color: #007bff;
+	color: coral;
 	border: 1px solid #ddd;
 }
 </style>

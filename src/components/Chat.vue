@@ -1,51 +1,58 @@
 <template>
-    <div class="all">
-		<app-header></app-header>
+	<div class="out">
+		<div class="spinner-align" v-if='!isShow'>
+			<div class="spinner-border" role="status" style="width:5rem;height:5rem;">
+				<span class="sr-only">Loading...</span>
+			</div>
+		</div>
 
-		<div class="body">
-			<transition-group name="fade" mode="out-in">
-				<div class="wrapper" v-for="message in messages" :key="message.id">
-					<div class="container-margin" v-if="message.name==userID">
-						<div class="d-flex justify-content-end">
-							<div class="timeAlign">
-								<div class="align-self-end mr-1 time-self">
-									<small class="text-muted">{{message.timestamp}}</small>
+		<div class="all" v-if="isShow">
+			<app-header></app-header>
+
+			<div class="body">
+				<transition-group name="fade" mode="out-in">
+					<div class="wrapper" v-for="message in messages" :key="message.id">
+						<div class="container-margin" v-if="message.name==userID">
+							<div class="d-flex justify-content-end">
+								<div class="timeAlign">
+									<div class="align-self-end mr-2 time-self">
+										<small class="text-muted">{{message.timestamp}}</small>
+									</div>
+
+									<div class="message-box">
+										<p class="message-content bg-primary text-white">{{message.content}}</p>
+									</div>
+								</div>
+							</div>
+						</div>
+				
+						<div v-if="message.name != userID" class="container-margin">
+							<div class="d-flex justify-content-start">
+								<div class="head-image mr-2 mt-1">
+									<img src="https://cdn2.ettoday.net/images/3454/3454344.jpg" alt="?">
 								</div>
 
-								<div class="message-box">
-									<p class="message-content bg-primary text-white">{{message.content}}</p>
+								<div class="timeAlign">
+									<div class="message-box">
+										<p class="message-name-others ml-1">{{message.name}}</p>
+										<p class="message-content-others text-dark">{{message.content}}</p>
+									</div>
+
+									<div class="align-self-end time-others">
+										<small class="mb-0 text-muted">{{message.timestamp}}</small>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
+				</transition-group>
+			</div>
 			
-					<div v-if="message.name != userID" class="container-margin">
-						<div class="d-flex justify-content-start">
-							<div class="head-image mr-2 mt-1">
-								<img src="https://cdn2.ettoday.net/images/3454/3454344.jpg" alt="?">
-							</div>
-
-							<div class="timeAlign">
-								<div class="message-box">
-									<p class="message-name-others ml-1">{{message.name}}</p>
-									<p class="message-content-others text-dark">{{message.content}}</p>
-								</div>
-
-								<div class="align-self-end time-others">
-									<small class="mb-0 text-muted">{{message.timestamp}}</small>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</transition-group>
+			<div class="footer">
+				<app-input></app-input>
+			</div>	
 		</div>
-		
-		<div class="footer">
-			<app-input></app-input>
-		</div>
-		
-    </div>
+	</div>
 </template>
 
 <script scoped>
@@ -62,7 +69,8 @@ export default {
 	data() {
 		return {
 			userID: this.$store.state.userID,
-			messages:[]
+			messages:[],
+			isShow:false
 		}
 	},
 
@@ -83,7 +91,9 @@ export default {
 						timestamp:moment(doc.data().timestamp).format('HH:mm')
 					})
 				}
-			})
+			});
+
+			this.isShow=true;
 		});
 	},
 
@@ -139,6 +149,7 @@ export default {
 
 .time-others{
 	padding: 0 10px 0 0;
+	margin-left: -6px;
 }
 
 .time-self{
@@ -158,6 +169,16 @@ export default {
 
 .footer{
 	height: 6.7rem;
+}
+
+.spinner-align{
+	color: coral;
+	line-height: 100vh;
+}
+
+.out{
+	display: flex;
+	justify-content: center;
 }
 
 .all{
