@@ -132,6 +132,7 @@ export default {
 	padding: 10px;
 	margin: -15px 0 0 0;
 	border-radius: 15px;
+	white-space: pre-line;
 }
 
 .message-content{

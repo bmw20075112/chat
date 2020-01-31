@@ -1,6 +1,9 @@
 <template>
-	<div>
-		<form @submit.prevent="sendMessage" @keyup.enter.exact="sendMessage">
+	<div class="wrapper">
+        <input type="file" id="file" style="display:none;"  @change="getFile">
+        <i class="fas fa-image"></i>
+
+		<form @submit.prevent="sendMessage" @keyup.enter.exact="sendMessage" class="align">
 			<div class="form-group mb-0 text-input">
 				<textarea type="text" class="form-control" 
 				v-model="message"></textarea>
@@ -15,7 +18,7 @@ import db from '../firebase';
 export default {
 	data() {
 		return {
-			
+			selectedFile: null
 		}
 	},
 
@@ -42,12 +45,21 @@ export default {
 	
 				this.message='';
 			}
-		}
+		},
+
+		// getFile(event){
+		// 	this.selectedFile=event.target.files[0];
+		// 	db.collection
+		// },
+
+		// fileUpload(){
+			
+		// }
 	},
 }
 </script>
 
-<style>
+<style scoped>
 
 .text-input{
 	display: flex;
@@ -62,10 +74,18 @@ export default {
 	height: 55px;
 }
 
-.far{
-	font-size: 2.5rem;
+.far, .fas{
+	font-size: 2.1rem;
 	padding: 10px;
 	color: coral;
 	border: 1px solid #ddd;
+}
+
+.align{
+    flex-grow: 1;
+}
+
+.wrapper{
+	display: flex;
 }
 </style>
